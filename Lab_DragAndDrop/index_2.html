@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Lab</title>
+    <style>
+        .dragTarget {
+            float: left;
+            width: 60px;
+            height: 60px;
+            padding: 10px;
+            border: 2px solid gray;
+            margin: 10px;
+        }
+
+        .dragOver {
+            border: dashed gray;
+        }
+
+        div.flagList {
+            clear: both;
+        }
+
+            div.flagList img {
+                clear: both;
+                margin: 25px;
+            }
+    </style>
+</head>
+<body>
+
+    <div id="divJapan" class="dragTarget">Japan</div>
+    <div id="divUsa" class="dragTarget">USA</div>
+    <div id="divCanada" class="dragTarget">Canada</div>
+
+    <div class="flagList">
+        <img id="imgUsa"
+             draggable="true"
+             ondragstart="doDragStart(event);"
+             src="images/USA.png" />
+        <img id="imgCanada" draggable="true" src="images/Canada.png" />
+        <img id="imgJapan" draggable="true" src="images/Japan.png">
+    </div>
+
+    <div id="debug"></div>
+
+    <script>
+
+        function doDragStart(e) {
+            document.getElementById("debug").innerHTML += e.target.id + " start dragging. <br />";
+            e.target.style.opacity = '0.4';
+            e.dataTransfer.setData("text/plain", e.target.id);
+        }
+
+        imgCanada.ondragstart = doDragStart;
+        imgJapan.addEventListener("dragstart", doDragStart);
+
+
+        function doDragOver(e) {
+            //document.getElementById("debug").innerHTML += e.target.id + " - OnDragOver<br />";
+            e.preventDefault();
+        }
+
+        divUsa.ondragover = doDragOver;
+        divJapan.ondragover = doDragOver;
+        divCanada.ondragover = doDragOver;
+
+
+        function doDragEnter(e) {
+            document.getElementById("debug").innerHTML += e.target.id + " - OnDragEnter<br />";
+            e.target.classList.add("dragOver");
+            e.preventDefault();
+        }
+        function doDragLeave(e) {
+            document.getElementById("debug").innerHTML += e.target.id + " - OnDragLeave<br />";
+            e.target.classList.remove("dragOver");
+            e.preventDefault();
+        }
+
+        divUsa.ondragenter = doDragEnter;
+        divUsa.ondragleave = doDragLeave;
+        divJapan.ondragenter = doDragEnter;
+        divJapan.ondragleave = doDragLeave;
+        divCanada.ondragenter = doDragEnter;
+        divCanada.ondragleave = doDragLeave;
+
+    </script>
+
+</body>
+</html>

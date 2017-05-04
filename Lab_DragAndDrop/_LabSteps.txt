@@ -1,0 +1,170 @@
+﻿Lab: 實作 HTML5 的拖放功能(Drag and Drop)
+
+
+
+
+1.	啟用拖放功能(Drag and Drop)
+
+
+1-1	分別用瀏覽器以及網頁編輯器開啟 index_0.html，瀏覽文件內容。
+
+
+1-2	三個 img 元素都加上 draggable="true" 屬性。
+
+
+1-3	針對 id="imgUsa" 的 img 元素，
+	加入 ondragstart="doDragStart(event);" 屬性，指定開始拖放的事件處理函式。
+
+
+1-4	在 <script> 區塊寫作 doDragStart() 事件處理函式，如下:
+
+    function doDragStart(e) {
+        e.target.style.opacity = '0.4';
+        document.getElementById("debug").innerHTML += e.target.id + " start dragging. <br />";
+    }
+
+
+1-5	存檔，在瀏覽器檢視作品，以滑鼠拖曳美國國旗看看。
+
+
+1-6	將 <script> 區塊改成下列內容，完成後，在瀏覽器檢視網頁並且拖曳各面國旗測試看看。
+
+<script>
+
+    function doDragStart(e) {
+        document.getElementById("debug").innerHTML += e.target.id + " start dragging. <br />";
+        e.target.style.opacity = '0.4';
+        e.dataTransfer.setData("text/plain", e.target.id);
+    }
+
+    imgCanada.ondragstart = doDragStart;
+    imgJapan.addEventListener("dragstart", doDragStart);
+
+</script>
+
+
+1-7	請試著回答下列問題:
+
+	(1) draggable="true" 屬性一定要有嗎?
+
+	(2) 事件是什麼? 事件處理函式是什麼?
+
+	(3) 如何指定事件的事件處理函式?
+
+	(4) e.target 指的是什麼?
+
+	(5) e, event 又是什麼?
+
+	(6) 事件處理函式一定要有 event 參數嗎?
+
+	<Note>
+	請先對 e.dataTransfer.setData() 留個印象，稍後我們會再提到它。
+
+
+
+
+2.	各個滑鼠途經的中途物件如何回應拖放事件
+
+2-1	貼入下列程式到 </script> 的前一行，完成後，
+	在瀏覽器檢視網頁並且拖曳各國國旗到各國國名方框。
+
+        function doDragOver(e) {
+            document.getElementById("debug").innerHTML += e.target.id + " - OnDragOver<br />";
+            e.preventDefault();
+        }
+
+        divUsa.ondragover = doDragOver;
+        divJapan.ondragover = doDragOver;
+        divCanada.ondragover = doDragOver;
+
+
+2-2	修改上述 doDragOver(), 註解 document.getElementById(...那行。
+
+
+2-3	繼續貼入下列程式到 </script> 的前一行，完成後，
+	在瀏覽器檢視網頁並且拖曳各面國旗到各國國名方框。
+
+        function doDragEnter(e) {
+            document.getElementById("debug").innerHTML += e.target.id + " - OnDragEnter<br />";
+            e.target.classList.add("dragOver");
+            e.preventDefault();
+        }
+        function doDragLeave(e) {
+            document.getElementById("debug").innerHTML += e.target.id + " - OnDragLeave<br />";
+            e.target.classList.remove("dragOver");
+            e.preventDefault();
+        }
+
+        divUsa.ondragenter = doDragEnter;
+        divUsa.ondragleave = doDragLeave;
+        divJapan.ondragenter = doDragEnter;
+        divJapan.ondragleave = doDragLeave;
+        divCanada.ondragenter = doDragEnter;
+        divCanada.ondragleave = doDragLeave;
+
+
+2-4	請試著回答下列問題:
+
+	(1) ondragenter, ondragleave 事件何時觸發?
+
+	(2) 這兩個事件當時的 e.target.id 是什麼?
+
+	(3) 如何指定事件的事件處理函式?
+
+	(4) event.preventDefault() 的作用為何?
+
+	(5) 為什麼不用 ondravover 事件呢?
+
+
+
+
+3.	滑鼠按鍵放開時的 Drop 事件
+
+3-1	繼續貼入下列程式到 </script> 的前一行，完成後，
+	在瀏覽器檢視網頁並且拖曳各面國旗到各國國名方框。
+
+        function doDrop(e) {
+            document.getElementById("debug").innerHTML += e.target.id + " - OnDrop<br />";
+            var sSourceId = e.dataTransfer.getData("text/plain");
+            document.getElementById("debug").innerHTML += "Info: " + sSourceId + "<br />";
+            e.preventDefault();
+        }
+
+        divUsa.ondrop = doDrop;
+        divJapan.ondrop = doDrop;
+        divCanada.ondrop = doDrop;
+
+
+3-2	請試著回答下列問題:
+
+	(1) 記得稍早之前，我們曾看過 e.dataTransfer.setData() 嗎?
+
+	(2) e.dataTransfer.getData() 取得的是什麼資料?
+
+	(3) 為什麼要用 setData() 再 getData() 的方式交換資料?
+
+	(4)	setData() 取得的資料，可否用於配對國旗呢?
+
+
+3-3	修改 doDrop() 事件處理函式，如下:
+
+        function doDrop(e) {
+            document.getElementById("debug").innerHTML += e.target.id + " - OnDrop<br />";
+            var sSourceId = e.dataTransfer.getData("text/plain");
+            if (sSourceId.substr(3, 99) == e.target.id.substr(3, 99)) {
+                // document.getElementById("debug").innerHTML += "Yes, Matched<br />";
+                e.target.appendChild(document.getElementById(sSourceId));
+            }
+            document.getElementById(sSourceId).style.opacity = "1.0";
+            e.target.classList.remove("dragOver");
+            e.preventDefault();
+        }
+
+
+3-4	請解說 doDrop() 事件處理函式的作法。
+
+
+
+
+
+

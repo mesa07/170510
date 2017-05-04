@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Lab</title>
+    <style>
+        .dragTarget {
+            float: left;
+            width: 60px;
+            height: 60px;
+            padding: 10px;
+            border: 2px solid gray;
+            margin: 10px;
+        }
+
+        .dragOver {
+            border: dashed gray;
+        }
+
+        div.flagList {
+            clear: both;
+        }
+
+            div.flagList img {
+                clear: both;
+                margin: 25px;
+            }
+    </style>
+</head>
+<body>
+
+    <div id="divJapan" class="dragTarget">Japan</div>
+    <div id="divUsa" class="dragTarget">USA</div>
+    <div id="divCanada" class="dragTarget">Canada</div>
+
+    <div class="flagList">
+        <img id="imgUsa" src="images/USA.png" />
+        <img id="imgCanada" src="images/Canada.png" />
+        <img id="imgJapan" src="images/Japan.png">
+    </div>
+
+    <div id="debug"></div>
+
+<script>
+
+</script>
+
+</body>
+</html>
