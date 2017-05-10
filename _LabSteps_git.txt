@@ -1,0 +1,314 @@
+﻿# Git 入門練習
+
+
+
+
+1.  設定與檢視 Git 設定值
+
+
+1.1 Window | New Terminal 新增一個終端機視窗
+
+
+1.2 輸入指令: git config --list
+    <Note> 觀察 user.name、user.email、core.editor 三項的設定值
+
+    
+1.3 輸入下列指令: 
+git config --global user.name "yourName"
+git config --global user.email "you@email.address"
+例如:
+git config --global user.name "Chien"
+git config --global user.email "app.dev.1226@gmail.com"
+
+
+1.4 再次輸入指令: git config --list 觀察新的設定值
+
+
+
+
+2.  建立本地端的 Repository
+
+
+2.1 輸入下列指令，建立並切換到新的 gitLab 資料夾
+mkdir gitLab
+cd gitLab
+
+
+2.2 在左側的 Workspace，滑鼠右鍵點按新的 gitLab 資料夾，
+    New File 建立新檔案，檔名: shopping.txt，內容如下:
+# Shpping List
+
+- milk
+- eggs
+
+    <Note> 記得要存檔喔! (Hint: File | Save)
+
+
+2.3 在終端機視窗，輸入指令: git status
+    <Note> 出現下列訊息，指出目前目錄找不到 git repository
+    fatal: Not a git repository (or any of the parent directories): .git
+
+
+2.4 在終端機視窗，輸入指令: git init
+    <Note> 觀察 gitLab 資料夾多出一個 .git 子資料夾
+    <Note> 螢幕左上方有點「齒輪」圖示，有開關可顯示系統隱藏資料夾。
+
+    
+2.5 在終端機視窗，輸入指令: git status
+    <Note> 出現下列訊息，指出 shopping.txt 不在 Git 管制之列。
+    Untracked files:
+        (use "git add <file>..." to include in what will be committed)
+
+        shopping.txt
+
+
+2.6 在終端機視窗，輸入下列指令:
+git add *.txt
+git status
+    <Note> 出現下列訊息，指出 shopping.txt 已修改，尚未 commit
+    Changes to be committed:
+        (use "git rm --cached <file>..." to unstage)
+
+        new file:   shopping.txt
+
+
+2.7 在終端機視窗，輸入下列指令:
+git commit -m "create a shopping list"
+git status
+    <Note> 出現下列訊息，指出 master 這個 branch 各項異動都已確認。
+    On branch master
+    nothing to commit, working directory clean
+
+
+2.Q 請試著回答下列問題:
+    (1) 什麼是 repository?
+    (2) 什麼是 working directory?
+    (3) 一個檔案，在 git 體系有哪三種狀態?
+
+
+
+
+3.  建立新的 branch 
+
+
+3.1 在終端機視窗，輸入指令: git branch
+    <Note> 目前只有一個 branch
+    * master
+
+
+3.1 在終端機視窗，輸入下列指令，建立 bbq 新 branch : 
+git branch bbq
+git branch
+    <Note> 出現的訊息，以 * 指出我們目前使用是 master 這個 branch。
+      bbq
+    * master
+
+
+3.2 在終端機視窗，輸入下列指令: 
+git checkout bbq
+git branch
+    <Note> 出現的訊息，以 * 指出我們目前使用是 bbq 這個 branch。
+    * bbq
+      master
+
+
+3.3 在左側的 Workspace，滑鼠點兩下 shopping.txt，內容修改成這樣:
+    <Note> 加上三項烤肉所需的品項，雞蛋數量為 10 顆。
+    <Note> 記得要存檔喔! (Hint: File | Save)
+    
+# Shpping List
+
+- milk
+- 10 eggs
+- pork
+- barbecue grill
+- wood coal
+
+
+3.4 將修改後的 shopping.txt commit 回 repository (bbq branch)
+git status
+git add shopping.txt
+git commit -m "add bbq items"
+
+
+3.5 切換回 master branch:
+git checkout master
+git branch
+    <Note> 出現的訊息，以 * 指出我們目前使用是 master 這個 branch。
+      bbq
+    * master
+
+
+3.6 在左側的 Workspace，滑鼠點兩下 shopping.txt 開啟檔案。
+    <Note> 為什麼剛才的那三項烤肉品項不見了?
+
+
+
+
+4.  觀察/比較/合併 branch
+
+
+4.1 在終端機視窗，輸入指令: git diff bbq
+
+    <Note> 此為文字版本的差異報告:
+diff --git a/shopping.txt b/shopping.txt
+index 2cdbce5..051e8e5 100644
+--- a/shopping.txt
++++ b/shopping.txt
+@@ -1,7 +1,4 @@
+ # Shpping List
+ 
+ - milk
+-- 10 eggs
+-- pork
+-- barbecue grill
+-- wood coal
++- eggs
+
+
+4.2 安裝 ungit。
+    在終端機視窗，輸入指令: npm install -g ungit
+    <Note> ungit 是一套圖形介面的 git client 工具。
+
+
+4.3 啟動 ungit，在終端機視窗，輸入下列指令:
+ungit --urlBase http://$IP --port $PORT
+
+
+4.4 在瀏覽器輸入下列網址，檢視 ungit 執行畫面:
+https://你的Workspace名稱-你的c9名稱.c9users.io/
+例如:
+https://gitlab-appdev1226.c9users.io/
+
+
+4.5 在「Enter path to repository」輸入下列路徑，然後按下 <Enter> 鍵:
+/home/ubuntu/workspace/gitLab
+    <Note> /home/ubuntu/workspace 是我們 workspace 的實體路徑
+    <Note> gitLab 是本練習的工作目錄名稱
+
+
+4.6 觀察/比較 master 與 bbq 的差異
+
+
+4.7 回到終端機視窗，按下 Ctrl + C 組合鍵以結束 ungit 程式。
+
+
+4.8 合併 master 與 bbq。在終端機視窗，輸入下列指令:
+git merge bbq
+
+
+4.9 在左側的 Workspace，滑鼠點兩下 shopping.txt 開啟檔案。
+    <Note> 購物清單已換成新版內容。
+
+
+4.Q 請試著回答下列問題:
+    (1) 什麼是 branch?
+    (2) 每個 repository 預設的 branch 叫什麼名字?
+    (3) 哪一個指令可切換 branch?
+    (4) 要合併分支主線的 git 指令怎麼寫?
+    
+
+
+
+5.  版本衝突模擬與因應對策
+
+
+5.1 確認目前使用的是 master 這個 branch: 
+git checkout master
+
+
+5.2 在購物清單尾端加入 - mushroom 新品項
+    <Note> 記得要存檔喔! (Hint: File | Save)
+
+
+5.3 輸入下列指令，確認檔案異動:
+git add shopping.txt
+git commit -m "add mushroom into shopping list"
+
+
+5.4 切換到 bbq 這個 branch: 
+git checkout bbq
+
+
+5.5 在購物清單尾端加入 - corn 新品項
+    <Note> 記得要存檔喔! (Hint: File | Save)
+
+
+5.6 輸入下列指令，確認檔案異動:
+git add shopping.txt
+git commit -m "add corn into shopping list"
+
+    <Note> 好了，現在兩個 branch 各自改了內容而且都確認了。怎麼辧呢?
+
+
+5.7 輸入下列指令:
+git checkout master
+git merge bbq
+    <Note>結果出現下列訊息，提示我們有版本衝突問題:
+    Auto-merging shopping.txt
+    CONFLICT (content): Merge conflict in shopping.txt
+    Automatic merge failed; fix conflicts and then commit the result.
+
+
+5.8 輸入指令: nano shopping.txt 介入編輯；
+    或者，直接點兩下 shopping.txt，Cloud9 有支援 Git 版本衝突編輯，
+    如果要選邊，請在「our changes」或「their changes」點按「Use Me」
+    如果要兩邊都留著，點按「Use Both」
+    
+    <Note> 記得要存檔喔! (Hint: File | Save)
+
+
+5.9 解決衝突之後，重新再 commit 一次，指令如下:
+git add shopping.txt
+git commit -m "Merge branch 'bbq', conflict solved"
+
+
+5.A 執行下列指令，觀看整個修改歷程記錄: 
+git log
+
+    <Note> 鍵盤 Q 鍵可結束瀏覽畫面。
+
+
+
+
+6.  使用 GitHub
+
+
+6.1 登入 http://github.com/  GitHub 網站，
+    建立一個新的 repository，設定如下:
+    Repository name: gitLab
+    勾選: Initialize this repository with a README
+
+
+6.2 回到 Cloud9，在終端機視窗輸入下列指令，
+    將遠端 GitHub repository 複製回本地端:
+    
+git clone http://github.com/你的GitHub帳號/gitLab
+例如:
+git clone http://github.com/AppDev1226/gitLab
+
+
+6.3 在終端機視窗輸入 cd gitLab 指令，切換到 gitLab 資料夾。
+
+
+6.4 在終端機視窗輸入 git remote 指令，確定 origin 已在清單之列。
+
+
+6.5 修改 READMD.md 的內容並且存檔。
+
+
+6.6 將 READMD.md 加入本地端的 repository。
+git add .
+git commit -m "update readme file"
+
+
+6.7 在終端機視窗輸入下列指令，將本機的 repository 上傳到 GitHub:
+git push
+
+    <Note> Username 與 Password 請輸入你 GitHub 的帳號與密碼
+
+
+6.6 重新整理 GitHub 網頁，檢視 README.md 與歷程記錄。
+
+
+
